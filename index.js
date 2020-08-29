@@ -244,13 +244,16 @@ client.on('message', message => {
 function endGameSequence(i) {
   games[i].saveScore();
   games[i].boardMessage.delete();
-  games[i].boardMessage.channel.send(
-    new Discord.MessageEmbed()
-    .setColor(games[i].body.length-2 > games[i].best ? "#34c771" : "#c92424")
-    .setTitle("Game Over")
-    .setDescription(games[i].body.length-2 > games[i].best ? "You set a new high score!" : `You didn't beat your high score of ${games[i].best}. Better luck next time!`)
-    .addField("Score", games[i].body.length-2 + "")
-  );
+  if (games[i].body.length-2 != 0) {
+    games[i].boardMessage.channel.send(
+      new Discord.MessageEmbed()
+      .setColor(games[i].body.length-2 > games[i].best ? "#34c771" : "#c92424")
+      .setTitle("Game Over")
+      .setDescription(games[i].body.length-2 > games[i].best ? "You set a new high score!" : `You didn't beat your high score of ${games[i].best}. Better luck next time!`)
+      .addField("Score", games[i].body.length-2 + "")
+    );
+  }
+  
   games.splice(i, 1);
 }
 
