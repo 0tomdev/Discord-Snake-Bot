@@ -227,7 +227,7 @@ client.on('message', message => {
       .setDescription("This is a fun little bot that lets you play the classic game of snake inside of Discord! (It's really more of a patience test because of how laggy it is.)")
       .addFields(
         {name: "Commands", value: "`"+prefix+"start` starts a new game\n`"+prefix+"exit` exits the current game\n`"+prefix+"leaderboard` displays the top scores"},
-        {name: "Other Information", value: "▫Made with discord.js\n▫Source code: <Github link>"}
+        {name: "Other Information", value: "▫Made with discord.js\n▫Source code: https://github.com/mthomas24/Discord-Snake-Bot"}
       )
       .setFooter("Created by JellyOnToast1#2710")
     )
@@ -257,7 +257,7 @@ function endGameSequence(i) {
 function showLeaderBoard(topScores, message) {
   let topScoresStr = "";
   client.users.fetch(topScores[0].id).then(user => {
-    topScoresStr += "**1. **"+user.username+"#"+user.discriminator+": "+topScores[0].score+" 🏆\n";
+    topScoresStr += "**1. **"+user.username+"#"+user.discriminator+": "+topScores[0].score+"\n";
     client.users.fetch(topScores[1].id).then(user => {
       topScoresStr += "**2. **"+user.username+"#"+user.discriminator+": "+topScores[1].score+"\n";
       client.users.fetch(topScores[2].id).then(user => {
