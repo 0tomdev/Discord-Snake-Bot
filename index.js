@@ -37,6 +37,9 @@ class Game {
     // Need to prevent apples from spawing where the snake is
     this.applePos.row = Math.floor(Math.random() * BOARD_SIZE);
     this.applePos.col = Math.floor(Math.random() * BOARD_SIZE);
+    if (this.applePos.row == this.row && this.applePos.col == this.col) {
+      return this.spawnApple();
+    }
   }
 
   gameOver() {
@@ -117,7 +120,7 @@ class Game {
     this.boardMessage.edit(
       new Discord.MessageEmbed()
       .setColor(emebdColor)
-      .setTitle(`Snake | ${this.player.username}'s Game`)  //.setTitle(`Score: ${this.body.length}\nHigh Score: ${25}`)
+      .setTitle(`${this.player.username}'s Game`)  //.setTitle(`Score: ${this.body.length}\nHigh Score: ${25}`)
       .addFields(
         {name: "Score", value: this.body.length-2, inline: true},
         {name: "High Score", value: `${this.best>this.body.length-2 ? this.best : this.body.length-2}`, inline: true}
@@ -269,7 +272,7 @@ function showLeaderBoard(topScores, message) {
         message.channel.send(
           new Discord.MessageEmbed()
           .setColor("#e8da3a")
-          .setTitle("Snake | Leaderboard")
+          .setTitle("Leaderboard")
           .addFields(
             {name: "Top Scores", value: topScoresStr},
             {name:"Your High Score", value: highscores[message.author.id] ? highscores[message.author.id] : "-"}
