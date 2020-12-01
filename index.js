@@ -130,7 +130,7 @@ class Game {
   }
 
   saveScore() {
-    if (highscores[this.player.id] < this.body.length-2) {
+    if (highscores[this.player.id] < this.body.length-2 || highscores[this.player.id] == undefined) {
       highscores[this.player.id] = this.body.length-2;
       fs.writeFileSync('highscores.json', JSON.stringify(highscores));
     }
@@ -139,6 +139,7 @@ class Game {
 
 client.on('ready', () => {
   console.log('Snakebot is running');
+  client.user.setPresence({activity:{name: `${prefix}help`, type: 'LISTENING'}});
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
@@ -238,6 +239,12 @@ client.on('message', message => {
   else if (command == "admin savescores" && message.author.id == "448269422814298112") {
     fs.writeFileSync('highscores.json', JSON.stringify(highscores));
     message.channel.send("High scores saved.");
+  }
+  else if (command == "admin shutdown" && message.author.id == "448269422814298112") {
+    for (let i=0; i<games.length; i++) {
+      endGameSequence(i);
+    }
+    throw new Error("Admin shutdown command");
   }
   else {
     message.channel.send("Use the `"+prefix+"info` command for information about this bot.");
