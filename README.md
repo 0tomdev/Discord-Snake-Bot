@@ -1,6 +1,7 @@
 # Discord-Snake-Bot
 This bot allows you to play snake inside of Discord.
 Use the snake/info command to get started.
+
 ![](images/game.PNG)
 
 ## Features
