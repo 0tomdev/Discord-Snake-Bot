@@ -9,6 +9,8 @@ Use the snake/info command to get started.
 ![](images/help.PNG)
 
 ### Leaderboard
+Every time you end a game of snake, your highscore will automatically be saved. Compete with your friends for the highest spot on the leaderboard!
+
 ![](images/leaderboard.PNG)
 
 ## Adding to your Server
