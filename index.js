@@ -140,6 +140,10 @@ class Game {
 client.on('ready', () => {
   console.log('Snakebot is running');
   client.user.setPresence({activity:{name: `${prefix}help`, type: 'LISTENING'}});
+  // Set the status every 4 hours
+  setInterval(() => {
+    client.user.setPresence({activity:{name: `${prefix}help`, type: 'LISTENING'}});
+  }, 14400000);
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
