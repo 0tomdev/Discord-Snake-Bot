@@ -137,13 +137,19 @@ class Game {
   }
 }
 
+function updatePresence() {
+  client.user.setPresence({activity:{name: `${prefix}help on ${client.guilds.cache.size} servers`, type: 'LISTENING'}});
+}
+
+function codeBlock(str) {
+  return "`" + str + "`"
+}
+
 client.on('ready', () => {
   console.log('Snakebot is running');
-  client.user.setPresence({activity:{name: `${prefix}help`, type: 'LISTENING'}});
+  updatePresence()
   // Set the status every 4 hours
-  setInterval(() => {
-    client.user.setPresence({activity:{name: `${prefix}help`, type: 'LISTENING'}});
-  }, 14400000);
+  setInterval(updatePresence, 14400000);
 });
 
 client.on('messageReactionAdd', (reaction, user) => {
@@ -234,24 +240,27 @@ client.on('message', message => {
       .setTitle("Snakebot")
       .setDescription("This is a fun little bot that lets you play the classic game of snake inside of Discord! (It's really more of a patience test because of how laggy it is.)")
       .addFields(
-        {name: "Commands", value: "`"+prefix+"start` starts a new game\n`"+prefix+"exit` exits the current game\n`"+prefix+"leaderboard` displays the top scores"},
+        {name: "Commands", value: `${codeBlock(prefix + "start")} starts a new game\n${codeBlock(prefix+"exit")} exits the current game\n${codeBlock(prefix+"leaderboard")} displays the top scores\n${codeBlock(prefix+"vote")} gives the link to vote for Snakebot. Voting is optional, but it would be greatly appreciated`},
         {name: "Other Information", value: "▫Made with discord.js\n▫Source code: https://github.com/mthomas24/Discord-Snake-Bot"}
       )
       .setFooter("Created by JellyOnToast1#2710")
     )
   }
-  else if (command == "admin savescores" && message.author.id == "448269422814298112") {
+  else if (command == "vote" || command == "upvote") {
+    message.channel.send(
+      new Discord.MessageEmbed()
+      .setTitle("Vote for Snakebot!")
+      .setColor(emebdColor)
+      .setDescription("If you took the time to vote for Snakebot on Top.gg, it would be greatly appreciated!")
+      .addField("Click Here to Vote", "https://top.gg/bot/747681316241145867/vote")
+    );
+  }
+  else if (command == "savescores" && message.author.id == "448269422814298112") {
     fs.writeFileSync('highscores.json', JSON.stringify(highscores));
     message.channel.send("High scores saved.");
   }
-  else if (command == "admin shutdown" && message.author.id == "448269422814298112") {
-    for (let i=0; i<games.length; i++) {
-      endGameSequence(i);
-    }
-    throw new Error("Admin shutdown command");
-  }
   else {
-    message.channel.send("Use the `"+prefix+"info` command for information about this bot.");
+    message.channel.send(`Use the ${codeBlock(prefix+"info")} command for information about this bot.`);
   }
 });
 
@@ -289,7 +298,6 @@ function showLeaderBoard(topScores, message) {
             {name:"Your High Score", value: highscores[message.author.id] ? highscores[message.author.id] : "-"}
           )
         );
-
       });
     });
   });
