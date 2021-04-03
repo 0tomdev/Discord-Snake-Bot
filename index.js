@@ -5,7 +5,7 @@ const client = new Discord.Client();
 const prefix = "snake/";
 let games = [];
 const BOARD_SIZE = 13;
-const emebdColor = "#32a852";
+const embedColor = "#32a852";
 let highscores = JSON.parse(fs.readFileSync('highscores.json'));
 
 class Game {
@@ -119,7 +119,7 @@ class Game {
     this.boardMessage.edit("");
     this.boardMessage.edit(
       new Discord.MessageEmbed()
-      .setColor(emebdColor)
+      .setColor(embedColor)
       .setTitle(`${this.player.username}'s Game`)  //.setTitle(`Score: ${this.body.length}\nHigh Score: ${25}`)
       .addFields(
         {name: "Score", value: this.body.length-2, inline: true},
@@ -193,7 +193,7 @@ client.on('message', message => {
       }
     });
     if (!alreadyInGame) {
-      message.channel.send(new Discord.MessageEmbed().setColor(emebdColor)).then(sentMessage => {
+      message.channel.send(new Discord.MessageEmbed().setColor(embedColor)).then(sentMessage => {
         let game = new Game(message.author, sentMessage)
         games.push(game);
         //console.log(sentMessage);
@@ -236,7 +236,7 @@ client.on('message', message => {
   else if (command == "help" || command == "info") {
     message.channel.send(
       new Discord.MessageEmbed()
-      .setColor(emebdColor)
+      .setColor(embedColor)
       .setTitle("Snakebot")
       .setDescription("This is a fun little bot that lets you play the classic game of snake inside of Discord! (It's really more of a patience test because of how laggy it is.)")
       .addFields(
@@ -250,7 +250,7 @@ client.on('message', message => {
     message.channel.send(
       new Discord.MessageEmbed()
       .setTitle("Vote for Snakebot!")
-      .setColor(emebdColor)
+      .setColor(embedColor)
       .setDescription("If you took the time to vote for Snakebot on Top.gg, it would be greatly appreciated!")
       .addField("Click Here to Vote", "https://top.gg/bot/747681316241145867/vote")
     );
