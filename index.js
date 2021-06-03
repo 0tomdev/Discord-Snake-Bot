@@ -183,8 +183,9 @@ client.on('messageReactionAdd', (reaction, user) => {
 client.on('message', message => {
   if (!message.content.startsWith(prefix)) { return; }
   //console.log(games);
-  const command = message.content.substring(prefix.length).toLowerCase();
-  if (command === "start") {
+  const commandRaw = message.content.substring(prefix.length);
+  let command = commandRaw.toLowerCase();
+  if (command === "start" || command == "play") {
     let alreadyInGame = false;
     games.forEach(g => {
       if (g.player == message.author) {
@@ -193,7 +194,7 @@ client.on('message', message => {
       }
     });
     if (!alreadyInGame) {
-      message.channel.send(new Discord.MessageEmbed().setColor(emebdColor)).then(sentMessage => {
+      message.channel.send(new Discord.MessageEmbed().setColor(emebdColor).setTitle("Shoving a battery up my ass")).then(sentMessage => {
         let game = new Game(message.author, sentMessage)
         games.push(game);
         //console.log(sentMessage);
@@ -201,7 +202,7 @@ client.on('message', message => {
       });
     }
   }
-  else if (command == "exit") {
+  else if (command == "exit" || command == "stop") {
     let inGame = false;
     for (let i=0; i<games.length; i++) {
       if (games[i].player.id == message.author.id) {
@@ -214,7 +215,7 @@ client.on('message', message => {
       message.channel.send("You are not currently in a game. To start a game, use the `"+prefix+"start` command.");
     }
   }
-  else if (command == "leaderboard") {
+  else if (command == "leaderboard" || command == "highscore") {
     let topScores = [];
     for (const id in highscores) {
       topScores.push({id: id, score: highscores[id]});
@@ -258,6 +259,17 @@ client.on('message', message => {
   else if (command == "savescores" && message.author.id == "448269422814298112") {
     fs.writeFileSync('highscores.json', JSON.stringify(highscores));
     message.channel.send("High scores saved.");
+  }
+  else if (command.startsWith("run") && message.author.id == "448269422814298112") {
+    command = commandRaw;
+    let code = command.substring(command.search("```") + 3, command.length - 3);
+    code = code.replace("javascript", "");
+    try {
+      eval(code)
+    }
+    catch (error) {
+      message.channel.send("There was an error: " + error);
+    }
   }
   else {
     message.channel.send(`Use the ${codeBlock(prefix+"info")} command for information about this bot.`);
@@ -303,7 +315,4 @@ function showLeaderBoard(topScores, message) {
   });
 }
 
-fs.readFile("token.txt", "utf8", (err, data) => {
-  const token = data;
-  client.login(token);
-});
+client.login(fs.readFileSync('token.txt', 'utf8'));
